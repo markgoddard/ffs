@@ -27,11 +27,15 @@
 import os
 import sys
 import errno
+import logging
 
-from fuse import FUSE, FuseOSError, Operations
+from fuse import FUSE, FuseOSError, LoggingMixIn, Operations
 
 
-class Passthrough(Operations):
+logging.basicConfig(filename='fuse-passthrough.log', filemode='w', level=logging.DEBUG)
+
+
+class Passthrough(LoggingMixIn, Operations):
     def __init__(self, root):
         self.root = root
 
