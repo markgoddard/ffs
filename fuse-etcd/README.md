@@ -19,6 +19,7 @@ A very minimal set of tests is available in `test-fuse-etcd.py`.
 ## Usage
 
 ```
+docker run -d --net=host --volume=etcd:/etcd-data --name etcd quay.io/coreos/etcd:latest /usr/local/bin/etcd --data-dir=/etcd-data --name etcd
 virtualenv venv
 venv/bin/pip install -r requirements.txt
 venv/bin/python fuse-etcd.py <mountpoint>
