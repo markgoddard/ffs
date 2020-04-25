@@ -440,7 +440,7 @@ class EtcdFSV2(LoggingMixIn, Operations):
 
 
 def main(mountpoint):
-    FUSE(EtcdFSV2(), mountpoint, nothreads=True, foreground=True)
+    FUSE(EtcdFSV2(), mountpoint, nothreads=True, foreground=True, allow_other=True)
 
 
 if __name__ == '__main__':
