@@ -9,7 +9,7 @@ import stat
 import time
 
 import etcd3
-from fuse import FUSE, FuseOSError, LoggingMixIn, Operations
+from fuse import FUSE, FuseOSError, LoggingMixIn, Operations, fuse_get_context
 import json
 
 import stm
@@ -280,8 +280,7 @@ class EtcdFSV2(LoggingMixIn, Operations):
         self._validate_path(path)
         is_dir = (flags & stat.S_IFDIR) == stat.S_IFDIR
         size = 4096 if is_dir else len(content)
-        uid = 1000 # mark
-        gid = 1000 # mark
+        uid, gid, _ = fuse_get_context()
         meta = Meta(atime=0, ctime=0, gid=gid, mode=flags, mtime=0, nlink=1,
                     size=size, uid=uid)
         meta.touch(atime=True, ctime=True, mtime=True)
