@@ -226,7 +226,34 @@ class EtcdFSV2(LoggingMixIn, Operations):
             raise FuseOSError(errno.EEXIST)
 
     def statfs(self, path):
-        raise NotImplementedError
+        """
+               unsigned long  f_bsize;    /* Filesystem block size */
+               unsigned long  f_frsize;   /* Fragment size */
+               fsblkcnt_t     f_blocks;   /* Size of fs in f_frsize units */
+               fsblkcnt_t     f_bfree;    /* Number of free blocks */
+               fsblkcnt_t     f_bavail;   /* Number of free blocks for
+                                             unprivileged users */
+               fsfilcnt_t     f_files;    /* Number of inodes */
+               fsfilcnt_t     f_ffree;    /* Number of free inodes */
+               fsfilcnt_t     f_favail;   /* Number of free inodes for
+                                             unprivileged users */
+               unsigned long  f_fsid;     /* Filesystem ID */
+               unsigned long  f_flag;     /* Mount flags */
+               unsigned long  f_namemax;  /* Maximum filename length */
+        """
+        return {
+            "f_bsize": 64,
+            "f_frsize": 0,
+            "f_blocks": 0,
+            "f_bfree": 0,
+            "f_bavail": 0,
+            "f_files": 0,
+            "f_ffree": 0,
+            "f_favail": 0,
+            "f_fsid": 0,
+            "f_flag": 0,
+            "f_namemax": 128,
+        }
 
     def unlink(self, path):
         meta_key = self._get_meta_key(path)
