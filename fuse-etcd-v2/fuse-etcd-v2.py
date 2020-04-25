@@ -128,6 +128,11 @@ class EtcdFSV2(LoggingMixIn, Operations):
     # Filesystem methods
     # ==================
 
+    def init(self, path):
+        assert path == '/'
+        # Ensure root directory exists.
+        self._ensure_file(path, 0o777 | stat.S_IFDIR, None)
+
     def access(self, path, mode):
         #meta, kv = self._get_meta(path)
         #file_mode = meta.mode
@@ -169,18 +174,6 @@ class EtcdFSV2(LoggingMixIn, Operations):
         return 0
 
     def getattr(self, path, fh=None):
-        # FIXME
-        if path == '/':
-            return {
-                'st_atime': 0,
-                'st_ctime': 0,
-                'st_gid': 1000, # mark
-                'st_mode': stat.S_IFDIR | 0o777,
-                'st_mtime': 0,
-                'st_nlink': 1,
-                'st_size': 4096,
-                'st_uid': 1000, # mark
-            }
         try:
             meta, kv = self._get_meta(path)
         except Exception as e:
