@@ -125,6 +125,11 @@ class EtcdFSV2(LoggingMixIn, Operations):
     def _get_stm(self):
         return stm.STM(self.client)
 
+    def _validate_path(self, path):
+        for part in path.split(os.path.sep):
+            if len(part) >= 256:
+                raise FuseOSError(errno.ENAMETOOLONG)
+
     # Filesystem methods
     # ==================
 
@@ -272,6 +277,7 @@ class EtcdFSV2(LoggingMixIn, Operations):
     # ============
 
     def _ensure_file(self, path, flags, content=""):
+        self._validate_path(path)
         is_dir = (flags & stat.S_IFDIR) == stat.S_IFDIR
         size = 4096 if is_dir else len(content)
         uid = 1000 # mark
