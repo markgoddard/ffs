@@ -70,7 +70,12 @@ class Meta(object):
 
 class EtcdFSV2(LoggingMixIn, Operations):
     def __init__(self):
-        self.client = etcd3.client()
+        grpc_options = [
+            ('grpc.max_receive_message_length', 100 * 1024 * 1024),
+            ('grpc.max_send_message_length', 100 * 1024 * 1024),
+        ]
+        self.client = etcd3.client(grpc_options=grpc_options)
+        # TODO: test client.
         self.fds = [None] * 1024
         self.logger = logging.getLogger('etcdfs')
 
