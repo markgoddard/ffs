@@ -327,6 +327,22 @@ class EtcdFSV2(LoggingMixIn, Operations):
             success=success,
             failure=[]
         )
+
+        if created:
+            parent_path = os.path.dirname(path)
+            parent_meta_key = self._get_meta_key(parent_path)
+
+            s = self._get_stm()
+
+            # FIXME: make consistent
+            @s.retried_transaction()
+            def _update_dir(s):
+                meta = Meta.from_json(s.get(parent_meta_key))
+                meta.touch(ctime=True, mtime=True)
+                s.put(parent_meta_key, meta.to_json())
+
+            _update_dir()
+
         return created
 
     def open(self, path, flags):
