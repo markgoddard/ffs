@@ -29,3 +29,16 @@ venv/bin/pip install -r requirements.txt
 venv/bin/python fuse-etcd-v2.py <mountpoint>
 ls <mountpoint>
 ```
+
+## fstest
+
+I have tried out [fstest](https://github.com/zfsonlinux/fstest) as a way to
+test this file system. It must be run as root, from inside the file system
+mount. For example:
+
+```
+cd /path/to/mounted/fs
+sudo prove -r /path/to/fstest/tests
+```
+
+Results are in [fstest_results.txt](fstest_results.txt).
